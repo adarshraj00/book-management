@@ -13,7 +13,7 @@ db.once("open", () => {
 });
 const PORT = process.env.PORT || 8080;
 const app = express();
-app.use(express.static(path.join(__dirname, "./client/build")));
+app.use(express.static(path.join("./client/build")));
 app.use(express.json());
 app.use(cookieParser());
 app.use(cors({ credentials: true, origin: "http://localhost:3000" }));
@@ -21,7 +21,7 @@ app.use(cors({ credentials: true, origin: "http://localhost:3000" }));
 app.use("/api/auth", require("./routes/auth"));
 app.use("/api/books", require("./routes/books"));
 app.get("*", (req, res) => {
-  res.sendFile(path.join(__dirname + "/client/build/index.html"));
+  res.sendFile(path.join("/client/build/index.html"));
 });
 
 
