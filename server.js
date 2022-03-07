@@ -18,9 +18,9 @@ app.use(cookieParser());
 app.use(cors({ credentials: true, origin: "http://localhost:3000" }));
 app.use("/api/auth", require("./routes/auth"));
 app.use("/api/books", require("./routes/books"));
-app.get("/", (req, res) => {
-  res.send("Hello World");
-});
+// app.get("/", (req, res) => {
+//   res.send("Hello World");
+// });
 app.get("/*", (req, res) => {
   res.sendFile(path.join(__dirname + "/client/build/index.html"));
 });
