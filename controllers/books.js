@@ -112,16 +112,7 @@ module.exports = {
   },
   getAllBooks: async (req, res) => {
     try {
-      const query = req.query;
-      const books = await Book.find({
-       $or: [
-        { title: { $regex: query.title, $options: "i" } },
-        { author: { $regex: query.name, $options: "i" } },
-        
-       ]
-      })
-        .skip(query.skip * query.limit)
-        .limit(query.limit);
+      const books = await Book.find({})
       res.status(200).json({ books });
     } catch (err) {
       console.log(err);
@@ -130,7 +121,8 @@ module.exports = {
   },
   getRecomendations: async (req, res) => {
     try {
-      let books = await Book.find({}).sort({ noOfCopies: -1 }).limit(5);
+      let books = await Book.find({}).sort({ issueCount: -1 }).limit(5);
+      console.log(books, "books");
       res.status(200).json({ books });
     } catch (err) {
       console.log(err);

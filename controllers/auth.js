@@ -18,7 +18,7 @@ module.exports = {
         res.status(400).json({msg:"password is incorrect"})
       }
       // if password is correct
-      const token=jwt.sign({id:user.id},"secret",{expiresIn:"1h"});
+      const token=jwt.sign({id:user._id},"secret",{expiresIn:"1h"});
       res.cookie("token", token, {
         httpOnly: true,
         maxAge: 1000 * 60 * 60,
