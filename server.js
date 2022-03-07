@@ -1,6 +1,7 @@
 const express = require("express");
 const mongoose = require("mongoose");
 const cookieParser = require("cookie-parser");
+const path = require("path");
 const cors = require("cors");
 require("dotenv").config();
 mongoose.connect(process.env.DB_URL);
@@ -25,5 +26,5 @@ app.get("/*", (req, res) => {
   res.sendFile(path.join(__dirname + "/client/build/index.html"));
 });
 app.listen(PORT, () => {
-  console.log("server is running on port 8080");
+  console.log("server is running on port " + PORT);
 });
