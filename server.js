@@ -16,13 +16,10 @@ const app = express();
 app.use(express.static(path.join(__dirname, "./client/build")));
 app.use(express.json());
 app.use(cookieParser());
-app.use(cors({ credentials: true, origin: "http://localhost:3000" }));
+app.use(cors({ credentials: true, origin: "*" }));
 
 app.use("/api/auth", require("./routes/auth"));
 app.use("/api/books", require("./routes/books"));
-app.get("*", (req, res) => {
-  res.sendFile(path.join(__dirname + "/client/build/index.html"));
-});
 
 // app.get("/", (req, res) => {
 //   res.send("Hello World");
