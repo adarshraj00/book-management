@@ -1,6 +1,7 @@
 const jwt = require("jsonwebtoken");
 const Admin=require('../Models/Admin');
 const User=require('../Models/User');
+
 module.exports = {
   user: async (req, res, next) => {
     try {
@@ -9,13 +10,15 @@ module.exports = {
         return res.status(401).json({ msg: "user not logged in" });
       }
       const obj = jwt.verify(token, "secret");
-      const user = await User.findById(obj.id);
+      console.log(obj)
+      const user = await User.findOne({ _id: obj.id });
       if (!user) {
         return res.status(401).json({ msg: "user not found" });
       }
       req.userId = obj.id;
       next();
     } catch (err) {
+      console.log(err)
       res.status(500).json({ msg: "token validation err" });
     }
   },

@@ -59,6 +59,8 @@ module.exports = {
   deleteBook: async (req, res) => {
     try {
       const book = await Book.findById(req.params.id);
+
+      // if already issued cant be deleted
       if (!book) {
         return res.status(400).json({ msg: "book does not exist" });
       }
@@ -75,10 +77,10 @@ module.exports = {
       if (!book) {
         return res.status(400).json({ msg: "book does not exist" });
       }
-      if (book.noOfCopies === 0) {
+      if(book.noOfCopies===book.issueCount){
         return res.status(400).json({ msg: "book is out of stock" });
       }
-      book.noOfCopies--;
+      book.issueCount++;
       await book.save();
       res.status(200).json({ msg: "book issued", book });
     } catch (err) {
@@ -102,17 +104,19 @@ module.exports = {
   },
   getAvailableBooks: async (req, res) => {
     try {
-      let { isIssued } = req.query;
-      let books = await Book.find({ isIssued: false });
+      let books = await Book.find({}); //??
+      books = books.filter((book) => {
+        return book.noOfCopies > book.issueCount;
+      });
       res.status(200).json({ books });
     } catch (err) {
       console.log(err);
-      res.status(500).json({});
+      res.status(500).json({msg:"server error"});
     }
   },
   getAllBooks: async (req, res) => {
     try {
-      const books = await Book.find({})
+      const books = await Book.find({});
       res.status(200).json({ books });
     } catch (err) {
       console.log(err);
@@ -132,13 +136,27 @@ module.exports = {
   searchBook: async (req, res) => {
     try {
       const query = req.query;
-      const books = await Book.find({})
-        .skip(query.skip * query.limit)
-        .limit(query.limit);
+      let obj = {};
+      if (query.title) {
+        obj.title = query.title;
+      }
+      if (query.author) {
+        obj.author = query.author;
+      }
+      if (query.startYear) {
+        obj.yearOfPublication = { $gte: query.startYear };
+      }
+      if (query.endYear) {
+        obj.yearOfPublication = {
+          ...obj.yearOfPublication,
+          $lte: query.endYear,
+        };
+      }
+      const books = await Book.find(obj);
       res.status(200).json({ books });
     } catch (err) {
       console.log(err);
-      res.status(500).json({});
+      res.status(500).json({msg:"server error"});
     }
   },
 };

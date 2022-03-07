@@ -9,6 +9,7 @@ router.post('/login-admin',authController.loginAdmin)
 router.post('/login-user',authController.loginUser)
 
 
+
 router.post('/logout',authController.logout)
 
 module.exports=router;

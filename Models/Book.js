@@ -21,10 +21,6 @@ const BookSchema = new mongoose.Schema({
     type: Number,
     required: true,
   },
-  issuedTo: {
-    type: mongoose.Schema.Types.ObjectId,
-    ref: "User",
-  },
   issueCount:{
     type:Number,
     default:0
