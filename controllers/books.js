@@ -156,7 +156,7 @@ module.exports = {
       res.status(200).json({ books });
     } catch (err) {
       console.log(err);
-      res.status(500).json({msg:"server error"});
+      res.status(500).json({msg});
     }
   },
 };
