@@ -1,29 +1,29 @@
-const express=require('express')
-const mongoose=require('mongoose')
+const express = require("express");
+const mongoose = require("mongoose");
 const cookieParser = require("cookie-parser");
-const cors=require('cors')
+const cors = require("cors");
 require("dotenv").config();
-const Admin=require('./Models/Admin')
-const User=require('./Models/User')
-mongoose.connect(
-  "mongodb+srv://adarsh-admin:AoUJo2luTwjrCDHv@cluster0.jjs5s.mongodb.net/kroop"
-);
+mongoose.connect(process.env.DB_URL);
 const db = mongoose.connection;
 db.on("error", console.error.bind(console, "Mongodb Connection Error:"));
 
 db.once("open", () => {
   console.log("Mongodb Connection Successful");
 });
-const app=express()
-app.use(express.json())
+const PORT = process.env.PORT || 8080;
+const app = express();
+app.use(express.static(__dirname + "/client/build"));
+app.use(express.json());
 app.use(cookieParser());
 app.use(cors({ credentials: true, origin: "http://localhost:3000" }));
-app.use('/api/auth',require('./routes/auth'))
-app.use('/api/books',require('./routes/books'))
-app.get('/',(req,res)=>{
-    res.send('Hello World')
-})
-
-app.listen(8080,()=>{
-    console.log('server is running on port 8080')
-})
+app.use("/api/auth", require("./routes/auth"));
+app.use("/api/books", require("./routes/books"));
+app.get("/", (req, res) => {
+  res.send("Hello World");
+});
+app.get("/*", (req, res) => {
+  res.sendFile(path.join(__dirname + "/client/build/index.html"));
+});
+app.listen(PORT, () => {
+  console.log("server is running on port 8080");
+});
