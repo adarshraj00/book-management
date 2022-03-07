@@ -16,7 +16,9 @@ const app = express();
 app.use(express.static(path.join(__dirname, "./client/build")));
 app.use(express.json());
 app.use(cookieParser());
-app.use(cors({ credentials: true, origin: "*" }));
+app.use(
+  cors({ credentials: true, origin: "https://book-management01.netlify.app" })
+);
 
 app.use("/api/auth", require("./routes/auth"));
 app.use("/api/books", require("./routes/books"));
